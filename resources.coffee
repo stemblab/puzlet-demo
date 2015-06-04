@@ -5,11 +5,19 @@
 resources
   load: [
     "http://puzlet.org/puzlet/js/d3.min.js"
-    "https://api.github.com/repos/flot/flot/contents/jquery.flot.symbol.js"
+    "/puzlet/math/puzlet-math.js"  # Later, won't need package.coffee part - make default.
+    "/puzlet/ace/ace.js"
+    "/puzlet/puzlet/js/render.js"
+#    "/puzlet/math/package.coffee"  # Later, won't need package.coffee part - make default.
     "main.coffee"
-    "../puzlet-demo/temp.coffee"
+#    "temp.coffee"
+#    "../puzlet-demo/temp.coffee"
     "/spacemath/mars-distance/code-widget.coffee"
+#    "../puzlet-demo/temp2.coffee"
   ]
-  export: [
-    "abc"
-  ]
+
+# UI-related options:
+# /puzlet/puzlet/css/coffeelab.css
+# //ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css
+# //ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js
+# /puzlet/puzlet/js/wiky.js

@@ -5,17 +5,17 @@ id2 = "temp2"
 
 isMain = true
 
-predefinedCoffee = """
+OLD_predefinedCoffee = """
 	pi = Math.PI
 """
 
-predefinedCoffeeLines = predefinedCoffee.split "\n"
+OLD_predefinedCoffeeLines = OLD_predefinedCoffee.split "\n"
 
-initMath = ->
+OLD_initMath = ->
 	window._$_ = PaperScript._$_
 	window.$_ = PaperScript.$_
 
-preProcess = (code) ->
+OLD_preProcess = (code) ->
 	
 	lf = "\n"
 	
@@ -37,7 +37,7 @@ preProcess = (code) ->
 	codeLines = preamble.concat(codeLines)
 	code = codeLines.join lf
 	
-postProcess = (js) ->
+OLD_postProcess = (js) ->
 	js = PaperScript.compile js #unless vanilla  # $blab.overloadOps no longer used.
 	js
 	
@@ -53,11 +53,14 @@ plotLines = (resultArray) ->
     lfs += @lf for i in [1..l]
     lfs
 
-compiler = $coffee.compiler(id: id1, preProcess: preProcess, postProcess: postProcess)
-compilerEval = $coffee.evaluator(id: id2, preProcess: preProcess, postProcess: postProcess)
+compiler = $coffee.compiler(id: id1)
+compilerEval = $coffee.evaluator(id: id2)
+#compiler = $coffee.compiler(id: id1, preProcess: preProcess, postProcess: postProcess)
+#compilerEval = $coffee.evaluator(id: id2, preProcess: preProcess, postProcess: postProcess)
 
 code1 = "a = 4; window.$rand = Math.random() + a;"
-code2 = "console.log $coffee.eval\na = 3\nx = 2+a+pi\n"
+code2 = "console.log $coffee.eval\na = 3\nx = 2+a+1\n"
+#code2 = "console.log $coffee.eval\na = 3\nx = 2+a+pi\n"
 
 compiler.compile code1
 compiler.resultStr
@@ -65,10 +68,10 @@ compiler.resultStr
 compilerEval.compile code2
 result = compilerEval.result + plotLines(compilerEval.resultArray)
 
-console.log "compiler", compiler
-console.log "evaluator", compilerEval
+#console.log "compiler", compiler
+#console.log "evaluator", compilerEval
 console.log "results", $rand, result
-console.log "$coffee", $coffee
+#console.log "$coffee", $coffee
 
 # $blab.evaluatingResource = this
 # $.event.trigger("compiledCoffeeScript", {url: @url})
