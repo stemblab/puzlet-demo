@@ -1,5 +1,7 @@
 /* Element styles */
 
+@import url('//puzlet.org/ace/loader.css');
+
 body {
 	font-family: Verdana, 'DejaVu Sans', sans-serif;
 }
