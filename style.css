@@ -19,12 +19,12 @@ body {
 }
 
 .left-col {
-  float:left;
-  width:470px;
+  float: left;
+  width: 470px;
 }
 .right-col {
-   float:right;
-   width:470px;
+   float: right;
+   width: 470px;
 }
 
 .clear {
