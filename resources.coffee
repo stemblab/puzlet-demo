@@ -6,7 +6,6 @@ resources
     "/puzlet/math/puzlet-math.js"
     "/puzlet/ace/ace.js"
     "/puzlet/puzlet/js/render.js"
-    "main.coffee"
     "/spacemath/mars-distance/code-widget.coffee"
   ]
 
