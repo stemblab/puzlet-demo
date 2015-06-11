@@ -30,3 +30,21 @@ body {
 .clear {
   clear:both;
 }
+
+#speedContainer {
+	margin-top: 5px;
+	margin-bottom: 15px;
+}
+
+#speedSlider {
+	display: inline-block;
+	width: 200px;
+	margin-left: 6px;
+	margin-right: 10px;
+	margin-bottom: -2px;
+}
+
+#speedText {
+	display: inline-block;
+    cursor: default;
+}
