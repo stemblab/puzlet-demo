@@ -31,20 +31,17 @@ body {
   clear:both;
 }
 
-#speedContainer {
-	margin-top: 5px;
-	margin-bottom: 15px;
+#slider-container {
+  margin-top: 5px;
+  margin-bottom: 15px;
 }
 
-#speedSlider {
-	display: inline-block;
-	width: 200px;
-	margin-left: 6px;
-	margin-right: 10px;
-	margin-bottom: -2px;
+.slider {
+  display: inline-block;
+  width: 200px;
 }
 
-#speedText {
-	display: inline-block;
-    cursor: default;
+.slider-text {
+  display: inline-block;
+  cursor: default;
 }

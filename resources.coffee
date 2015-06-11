@@ -7,8 +7,9 @@ resources
     "/puzlet/ace/ace.js"
     "/puzlet/puzlet/js/render.js"
     "/spacemath/mars-distance/code-widget.coffee"
-    "precompile.coffee"
+    "app.coffee"
     "slider.coffee"
+    "widgets.coffee"
   ]
 
 # UI-related options:
