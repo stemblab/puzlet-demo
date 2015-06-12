@@ -1,4 +1,37 @@
-$blab.slider = (spec) -> new $blab.Slider spec
+$blab.newSlider = (id) ->
+  widgets = $blab.widgets
+  unless widgets[id]
+    
+    code = """
+    $blab.slider
+      id: "#{id}"
+      min: 0
+      max: 10
+      step: 0.1
+      init: 5
+      container: "widgets"
+      prompt: "Set value:"
+      text: (v) -> v
+    
+    $blab.initWidgets()
+    """
+    
+    console.log "CODE", code
+    #$coffee.evaluate(code)
+    #$blab.resources.find("widgets.coffee").containers.fileNodes[0].setCode(code)
+    #$blab.resources.find("widgets.coffee").containers.setEditorContent code
+    #console.log "resource", 
+    resource = $blab.resources.find("widgets.coffee")
+    resource.containers.fileNodes[0].editor.set code
+    resource.compile()
+    
+  widgets[id].getVal()
+  
+
+$blab.slider = (spec) ->
+#  console.log "slider", $blab.widgets[spec.id]
+  
+  new $blab.Slider spec
 
 class $blab.Slider
   

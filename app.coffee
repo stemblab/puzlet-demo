@@ -23,7 +23,7 @@ $blab.initWidgets = ->
   # Ignore this code - it will be replaced
   $blab.widgets['y0'] = $("#y0") # ZZZ temp
   $blab.widgetPrecode()
-  $blab.widgets['freq-slider'].initialize()
+  $blab.widgets['freq-slider']?.initialize()
 
 
 $blab.widgetPrecode = ->
@@ -33,7 +33,7 @@ $blab.widgetPrecode = ->
   precompile = {}
   
   precompile["foo.coffee"] =
-    preamble: "slider = (id) -> $blab.widgets[id].getVal()\ntable = (id, v) ->\n  $('#'+id).text(v)\n  null\n"
+    preamble: "slider = (id) -> $blab.newSlider(id)\ntable = (id, v) ->\n  $('#'+id).text(v)\n  null\n"
     postamble: ""
   
   $blab.precompile(precompile)
