@@ -9,7 +9,7 @@ $blab.widgets =
     symbol: "y0"
     files: ["foo.coffee"]  # Can have only one file for sink?
 
-new $blab.Slider
+$blab.widgets["freq-slider"].slider = new $blab.Slider
   id: "freq-slider"
   min: 0.1
   max: 10
@@ -17,5 +17,5 @@ new $blab.Slider
   init: 4.2
   val: (v) -> $("#freq-slider-text").html v+" Hz"
   
-$blab.registerWidgets()
+$blab.registerWidgets() #unless $blab.CoffeeResource.preCompileCode.length
 

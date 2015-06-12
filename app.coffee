@@ -1,4 +1,8 @@
-$blab.registerWidgets = ->
+$blab.registered ?= false
+
+$blab.OLD_registerWidgets = ->
+  
+  return if $blab.registered
   
   precompile = {}
   
@@ -9,7 +13,28 @@ $blab.registerWidgets = ->
       p.postamble += "\n$('##{key}').text(#{widget.symbol})" if widget.type is "sink"  # ZZZ Need to generalize
       
   $blab.precompile(precompile)
+  
+  $blab.registered = true
 
+
+$blab.registerWidgets = ->
+  
+  return if $blab.registered
+  
+  precompile = {}
+  
+  precompile["foo.coffee"] =
+    preamble: "slider = (id) -> $blab.widgets[id].val\ntable = (id, v) -> $('#y0').text(v)\n"
+    postamble: ""
+  
+  $blab.precompile(precompile)
+  
+  $blab.registered = true
 
 $blab.compileWidget = (widget) ->
-  $blab.resources.find(file)?.compile() for file in widget.files 
+  
+  for file in widget.files
+    resource = $blab.resources.find(file)
+    #console.log "------------- compileWidget", file, resource
+    resource?.compile()
+  #$.event.trigger("preCompileCoffee", {resource: $blab.resources.find("widgets.coffee")})  # ZZZ hack

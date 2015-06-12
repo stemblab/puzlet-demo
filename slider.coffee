@@ -5,6 +5,7 @@ class $blab.Slider
     {@id, @init, @min, @max, @step, @val} = @spec
     
     @container = $ "#"+@id
+    @container.empty()
     
     @container.slider
       #orientation: "vertical"
@@ -23,7 +24,7 @@ class $blab.Slider
     return unless $blab.widgets
     widget = $blab.widgets[@id]
     widget.val = v
-    $blab.compileWidget(widget)
+    $blab.compileWidget(widget)  # ZZZ reinstate after second compile
     
   # API
   set: (v) -> @container.slider("value", v)
