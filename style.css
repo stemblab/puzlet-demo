@@ -31,12 +31,12 @@ body {
   clear:both;
 }
 
-#slider-container {
+.slider-container {
   margin-top: 5px;
   margin-bottom: 15px;
 }
 
-.slider {
+.mvc-slider {
   display: inline-block;
   width: 200px;
 }

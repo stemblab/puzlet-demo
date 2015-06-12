@@ -1,3 +1,5 @@
+$blab.widgets = widgets = {}
+
 $blab.registered ?= false
 
 $blab.OLD_registerWidgets = ->
@@ -17,21 +19,35 @@ $blab.OLD_registerWidgets = ->
   $blab.registered = true
 
 
-$blab.registerWidgets = ->
+$blab.initWidgets = ->
+  # Ignore this code - it will be replaced
+  $blab.widgets['y0'] = $("#y0") # ZZZ temp
+  $blab.widgetPrecode()
+  $blab.widgets['freq-slider'].initialize()
+
+
+$blab.widgetPrecode = ->
   
-  return if $blab.registered
+  #return if $blab.registered
   
   precompile = {}
   
   precompile["foo.coffee"] =
-    preamble: "slider = (id) -> $blab.widgets[id].val\ntable = (id, v) ->\n  $('#y0').text(v)\n  null\n"
+    preamble: "slider = (id) -> $blab.widgets[id].getVal()\ntable = (id, v) ->\n  $('#'+id).text(v)\n  null\n"
     postamble: ""
   
   $blab.precompile(precompile)
   
   $blab.registered = true
+  
+#$blab.widgetPrecode()
 
 $blab.compileWidget = (widget) ->
+  
+  # TEMP
+  resource = $blab.resources.find("foo.coffee")
+  resource?.compile()
+  return
   
   for file in widget.files
     resource = $blab.resources.find(file)
