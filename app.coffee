@@ -24,7 +24,7 @@ $blab.registerWidgets = ->
   precompile = {}
   
   precompile["foo.coffee"] =
-    preamble: "slider = (id) -> $blab.widgets[id].val\ntable = (id, v) -> $('#y0').text(v)\n"
+    preamble: "slider = (id) -> $blab.widgets[id].val\ntable = (id, v) ->\n  $('#y0').text(v)\n  null\n"
     postamble: ""
   
   $blab.precompile(precompile)
