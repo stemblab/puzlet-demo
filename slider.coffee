@@ -12,8 +12,6 @@ $blab.newSlider = (id) ->
       container: "widgets"
       prompt: "Set value:"
       text: (v) -> v
-    
-    $blab.initWidgets()
     """
     
     console.log "CODE", code
@@ -22,10 +20,15 @@ $blab.newSlider = (id) ->
     #$blab.resources.find("widgets.coffee").containers.setEditorContent code
     #console.log "resource", 
     resource = $blab.resources.find("widgets.coffee")
-    resource.containers.fileNodes[0].editor.set code
-    resource.compile()
     
-  widgets[id].getVal()
+    #console.log "widgets.coffee", resource
+    
+    resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
+    console.log "*** compile widgets.coffee"
+    setTimeout (-> resource.compile()), 500
+    
+  # TEMP widgets[id].getVal()
+  5
   
 
 $blab.slider = (spec) ->
@@ -88,7 +91,9 @@ class $blab.Slider
       max: @max
       step: @step
       value: @init
-      slide: (e, ui) => @setVal(ui.value)
+      slide: (e, ui) =>
+        @setVal(ui.value)
+        $blab.compileWidget()
       change: (e, ui) =>  # Unused because responds to slide method
     
     #@setVal @init
@@ -101,7 +106,7 @@ class $blab.Slider
     #@val v
     @value = v
     return unless $blab.widgets
-    $blab.compileWidget()
+    #$blab.compileWidget()
 #    widget = $blab.widgets[@id]
 #    widget.val = v
 #    $blab.compileWidget(widget)  # ZZZ reinstate after second compile
