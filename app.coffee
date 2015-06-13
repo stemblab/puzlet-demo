@@ -3,7 +3,7 @@ $blab.widgets = widgets = {}
 $blab.registered ?= false
 
 $(document).on "compiledCoffeeScript", (evt, data) ->
-  console.log "+++Compiled", data
+  #console.log "+++Compiled", data
   $blab.initWidgets() if data.url is "widgets.coffee"
 
 $blab.initWidgets = ->
@@ -34,11 +34,11 @@ $blab.widgetPrecode = ->
 
 $blab.compileWidget = (widget) ->
   
-  console.log "**** compile widget"
+  #console.log "**** compile widget"
   
   # TEMP
   resource = $blab.resources.find("foo.coffee")
-  #resource?.compile()
+  resource?.compile()
   return
   
   for file in widget.files

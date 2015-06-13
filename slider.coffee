@@ -27,8 +27,7 @@ $blab.newSlider = (id) ->
     console.log "*** compile widgets.coffee"
     setTimeout (-> resource.compile()), 500
     
-  # TEMP widgets[id].getVal()
-  5
+  widgets[id]?.getVal() ? 5
   
 
 $blab.slider = (spec) ->
