@@ -72,7 +72,9 @@ class $blab.Slider
       @outer?.remove()
     
     @outer = $ "<div>", class: "slider-container"
-    @outer.append @prompt+" "
+    @sliderPrompt = $ "<div>", class: "slider-prompt"
+    @sliderPrompt.append @prompt
+    @outer.append @sliderPrompt  #@prompt+" "
     @sliderContainer = $ "<div>", class: "mvc-slider", id: @id
     @outer.append @sliderContainer
     @textDiv = $ "<div>", class: "slider-text"

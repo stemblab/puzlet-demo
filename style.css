@@ -45,9 +45,17 @@ body {
   margin-bottom: 15px;
 }
 
+.slider-prompt {
+  display: inline-block;
+  width: 90px;
+  /*padding-right: 5px;*/
+  text-align: right;
+}
+
 .mvc-slider {
   display: inline-block;
   width: 200px;
+  margin-left: 10px;
 }
 
 .slider-text {
