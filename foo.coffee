@@ -11,6 +11,8 @@ p = slider()
 q = slider "and-another"
 y = sin(2*pi*f*t) + s*rand([t.length])
 
-table "y0", y[0]
+table "my-table", t[0..3], y[0..3]
+
+#table "y0", y[0]
 
 plot t, y

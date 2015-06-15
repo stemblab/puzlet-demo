@@ -60,7 +60,8 @@ $blab.widgetPrecode = ->
   precompile = {}
   
   precompile["foo.coffee"] =
-    preamble: "slider = (id) -> $blab.newSlider(id)\ntable = (id, v) ->\n  $('#'+id).text(v)\n  null\n"
+    preamble: "slider = (id) -> $blab.newSlider(id)\ntable = (id, v...) -> $blab.newTable(id, v)\n"
+#    preamble: "slider = (id) -> $blab.newSlider(id)\ntable = (id, v) ->\n  $('#'+id).text(v)\n  null\n"
     postamble: ""
   
   $blab.precompile(precompile)
