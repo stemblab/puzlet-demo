@@ -8,7 +8,12 @@ layout = {}
 $blab.layout = (l) ->
   layout = l
   
+$blab.widgetContainer = "#row1 .left"
+$blab.pos = (p) => $blab.widgetContainer = p
 
+$blab.text = (t) ->
+  $($blab.widgetContainer).append(t)
+  
 doLayout = ->
   w = $("#widgets")
   w.empty()

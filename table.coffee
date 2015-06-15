@@ -14,7 +14,6 @@ $blab.newTable = (id, v) ->
     $blab.table
       id: "#{id}"
       headings: ["Column 1", "Column 2"]
-      container: "#row1 .right"
     """
     
     #console.log "CODE", code
@@ -35,7 +34,6 @@ $blab.newTable = (id, v) ->
         $blab.table
           id: "#{id}"
           headings: ["Column 1", "Column 2"]
-          container: "#row1 .right"
         
       setTimeout(makeTable, 700)
       
@@ -75,7 +73,8 @@ class $blab.Table
     #@textDiv = $ "<div>", class: "slider-text"
     #@outer.append(" ").append @textDiv
     
-    $(@container).append @outer
+    $($blab.widgetContainer).append @outer
+    #$(@container).append @outer
     
     #console.log "outer", $(@id.parent())
     

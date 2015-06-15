@@ -16,7 +16,6 @@ $blab.newSlider = (id) ->
       max: 10
       step: 0.1
       init: 5
-      container: "#row1 .left"
       prompt: "Set value:"
       text: (v) -> v
     """
@@ -42,7 +41,6 @@ $blab.newSlider = (id) ->
           max: 10
           step: 0.1
           init: 5
-          container: "#row1 .left"
           prompt: "Set value:"
           text: (v) -> v
         
@@ -80,7 +78,8 @@ class $blab.Slider
     @textDiv = $ "<div>", class: "slider-text"
     @outer.append(" ").append @textDiv
     
-    $(@container).append @outer
+    $($blab.widgetContainer).append @outer
+#    $(@container).append @outer
     
     #console.log "outer", $(@id.parent())
     
