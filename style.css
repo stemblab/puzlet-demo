@@ -27,6 +27,15 @@ body {
    width: 470px;
 }
 
+.left {
+  float: left;
+  width: 470px;
+}
+.right {
+   float: right;
+   width: 470px;
+}
+
 .clear {
   clear:both;
 }

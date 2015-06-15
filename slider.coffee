@@ -1,5 +1,12 @@
 $blab.newSlider = (id) ->
   widgets = $blab.widgets
+  
+  console.log "NEW SLIDER - COUNT", $blab.widgetCount
+  idSpecified = id
+  unless idSpecified
+    id = $blab.widgetCount
+    $blab.widgetCount++
+  
   unless widgets[id]
     
     code = """
@@ -9,7 +16,7 @@ $blab.newSlider = (id) ->
       max: 10
       step: 0.1
       init: 5
-      container: "widgets"
+      container: "#row1 .left"
       prompt: "Set value:"
       text: (v) -> v
     """
@@ -19,13 +26,27 @@ $blab.newSlider = (id) ->
     #$blab.resources.find("widgets.coffee").containers.fileNodes[0].setCode(code)
     #$blab.resources.find("widgets.coffee").containers.setEditorContent code
     #console.log "resource", 
-    resource = $blab.resources.find("widgets.coffee")
     
     #console.log "widgets.coffee", resource
     
-    resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
-    console.log "*** compile widgets.coffee"
-    setTimeout (-> resource.compile()), 500
+    if idSpecified
+      resource = $blab.resources.find("widgets.coffee")
+      resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
+      console.log "*** compile widgets.coffee"
+      setTimeout (-> resource.compile()), 500
+    else
+      makeSlider = ->
+        $blab.slider
+          id: "#{id}"
+          min: 0
+          max: 10
+          step: 0.1
+          init: 5
+          container: "#row1 .left"
+          prompt: "Set value:"
+          text: (v) -> v
+        
+      setTimeout(makeSlider, 700)
     
   widgets[id]?.getVal() ? 5
   
@@ -57,7 +78,7 @@ class $blab.Slider
     @textDiv = $ "<div>", class: "slider-text"
     @outer.append(" ").append @textDiv
     
-    $("#"+@container).append @outer
+    $(@container).append @outer
     
     #console.log "outer", $(@id.parent())
     
@@ -113,4 +134,4 @@ class $blab.Slider
   getVal: -> @value
     
   # API
-  set: (v) -> @container.slider("value", v)
+  set: (v) -> @sliderContainer.slider("value", v)

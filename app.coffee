@@ -2,16 +2,52 @@ $blab.widgets = widgets = {}
 
 $blab.registered ?= false
 
+$blab.widgetCount = 0
+
+layout = {}
+$blab.layout = (l) ->
+  layout = l
+  
+
+doLayout = ->
+  w = $("#widgets")
+  w.empty()
+  for label, row of layout
+    console.log label, row
+    r = $ "<div>", id: label
+    w.append r
+    for col in row
+      c = $ "<div>", class: col
+      r.append c
+
+$(document).on "preCompileCoffee", (evt, data) ->
+  console.log "preCompileCoffee", data.resource.url 
+  $blab.widgetCount = 0
+  if data.resource.url is "widgets.coffee"
+    w = $("#widgets")
+    w.empty()
+    doLayout()
+    
+    #r = $ "<div>", id: "row1"
+    #w.append r
+    #r.append($ "<div>", class: "left").append($ "<div>", class: "right")
+    $blab.widgets = widgets = {}
+
 $(document).on "compiledCoffeeScript", (evt, data) ->
   #console.log "+++Compiled", data
   $blab.initWidgets() if data.url is "widgets.coffee"
 
 $blab.initWidgets = ->
   # Ignore this code - it will be replaced
+  
+  console.log "LAYOUT", layout
+  #doLayout()
+  
   $blab.widgets['y0'] = $("#y0") # ZZZ temp
   $blab.widgetPrecode()
-  $blab.widgets['freq-slider']?.initialize()
-  $blab.widgets['z-slider']?.initialize()
+  for key, widget in $blab.widgets
+    widget?.initialize() unless key is 'y0'
+    #$blab.widgets['z-slider']?.initialize()
   
   $blab.compileWidget()
 
