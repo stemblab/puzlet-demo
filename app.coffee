@@ -19,6 +19,7 @@ doLayout = ->
     for col in row
       c = $ "<div>", class: col
       r.append c
+    r.append($ "<div>", class: "clear")
 
 $(document).on "preCompileCoffee", (evt, data) ->
   console.log "preCompileCoffee", data.resource.url 
