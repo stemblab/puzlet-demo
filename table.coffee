@@ -13,11 +13,10 @@ class Table extends Widget
     "table = (spec) -> new $blab.Widgets.Table(spec)"
     
   @computePreamble:
-    "table = (id, v...) -> $blab.Widgets.Table.make(id, v)"
+    "table = (id, v...) -> $blab.Widgets.Table.compute(id, v)"
   
-  @make: (id, v) ->
-    widget = Widget.makeWidget(Table, id)
-    widget?.setVal(v)
+  @compute: (id, v) ->
+    Widget.fetch(Table, id)?.setVal(v)
   
   constructor: (@spec) ->
     
@@ -40,7 +39,6 @@ class Table extends Widget
     
     row = []
     for x, idx in v[0]
-      #console.log idx, x, v[1][idx]
       tr = $ "<tr>"
       @table.append tr
       for i in [0...v.length] 

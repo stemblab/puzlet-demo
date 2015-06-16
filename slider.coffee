@@ -17,11 +17,10 @@ class Slider extends Widget
     "slider = (spec) -> new $blab.Widgets.Slider(spec)"
     
   @computePreamble:
-    "slider = (id) -> $blab.Widgets.Slider.make(id)"
+    "slider = (id) -> $blab.Widgets.Slider.compute(id)"
   
-  @make: (id) ->
-    widget = Widget.makeWidget(Slider, id)
-    widget?.getVal() ? Slider.initVal
+  @compute: (id) ->
+    Widget.fetch(Slider, id)?.getVal() ? Slider.initVal
   
   constructor: (@spec) ->
     
@@ -66,5 +65,3 @@ class Slider extends Widget
   
 
 $blab.Widgets.Slider = Slider
-
-  

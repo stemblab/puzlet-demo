@@ -1,8 +1,8 @@
 class Widgets
   
-  @filename: "widgets.coffee"  # should be layout.coffee
+  filename: "widgets.coffee"  # should be layout.coffee
   
-  constructor: (@layout) ->  # ZZZ pass render?
+  constructor: (@layout, @computation) ->  # ZZZ pass render?
     
     @widgets = {}
     @count = 0
@@ -10,59 +10,52 @@ class Widgets
     $(document).on "preCompileCoffee", (evt, data) =>
       url = data.resource.url
       console.log "preCompileCoffee", url 
-      @count = 0
-      return unless url is "widgets.coffee"
+      @count = 0  # ZZZ Bug?  only for foo.coffee or widgets.coffee
+      return unless url is @filename
       @layout.render()
-      @layoutPrecode()
+      @precode()
       @widgets = {}
     
     $(document).on "compiledCoffeeScript", (evt, data) =>
-      @init() if data.url is "widgets.coffee"
-    
-  init: ->
-    @computePrecode()
-    for key, widget in @widgets #$blab.widgets
-      widget?.initialize()
-    @compute()
+      return unless data.url is @filename
+      widget?.initialize?() for key, widget in @widgets
+      @computation.init()
     
   register: (id, obj, element) ->
-    @layout.append element
     @widgets[id] = obj
+    @layout.append element
     
-  add: (Widget, id) ->
-    
-    idSpecified = id
+  fetch: (Widget, id) ->
+    idSpecified = id?
     unless idSpecified
       id = @count
       @count++
-  
+    if @widgets[id]
+      @widgets[id]
+    else
+      # Create new widget
+      if idSpecified then @createFromId(Widget, id) else @createFromCounter(Widget, id)
+      null  # Widget must set default val
+    
+  createFromId: (Widget, id) ->
+    resource = $blab.resources.find(@filename)
     name = Widget.handle
     spec = Widget.spec(id)
     s = spec.split("\n").join("\n  ")
     code = "#{name}\n  #{s}"
-  
-    make = ->
-      new Widget eval(CoffeeScript.compile(spec, bare: true))
-  
-    unless @widgets[id]
-      if idSpecified
-        resource = $blab.resources.find("widgets.coffee")
-        resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
-        setTimeout (-> resource.compile()), 500
-      else
-        setTimeout(make, 700)
-      
-    @widgets[id]
+    resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
+    setTimeout (-> resource.compile()), 500
     
-  compute: ->
-    # ZZZ TEMP - wired to foo.coffee
-    resource = $blab.resources.find("foo.coffee")
-    resource?.compile()
-  
-  layoutPrecode: ->
+  createFromCounter: (Widget, id) ->
+    spec = Widget.spec(id)
+    make = -> new Widget eval(CoffeeScript.compile(spec, bare: true))
+    setTimeout(make, 700)
     
+  compute: -> @computation.compute()
+  
+  precode: ->
     precompile = {}
-    precompile["widgets.coffee"] =
+    precompile[@filename] =
       preamble:  """
       #{Layout.shortcuts}
       #{$blab.Widgets.Slider.layoutPreamble}
@@ -70,13 +63,33 @@ class Widgets
       
       """
       postamble: ""
-      
     $blab.precompile(precompile)
-    
-  computePrecode: ->
-    
-    precompile = {}
+
+
+class Widget
   
+  @fetch: (C, id) -> widgets.fetch(C, id)
+    
+  register: (element) -> widgets.register @id, this, element
+    
+  compute: -> widgets.compute()
+
+
+class Computation
+  
+  constructor: ->
+    
+  init: ->
+    @precode()
+    @compute()
+    
+  compute: ->
+    # ZZZ TEMP - wired to foo.coffee
+    resource = $blab.resources.find("foo.coffee")
+    resource?.compile()
+    
+  precode: ->
+    precompile = {}
     precompile["foo.coffee"] =
       preamble: """
       #{$blab.Widgets.Slider.computePreamble}
@@ -85,19 +98,7 @@ class Widgets
       """
       
       postamble: ""
-    
     $blab.precompile(precompile)
-
-
-class Widget
-  
-  @makeWidget: (C, id) -> theWidgets.add(C, id)
-    
-  register: (element) ->
-    theWidgets.register @id, this, element
-    
-  compute: ->
-    theWidgets.compute()  # for foo.coffee
 
 
 class Layout
@@ -133,7 +134,8 @@ class Layout
 
 
 layout = new Layout
-theWidgets = new Widgets layout  # ZZZ pass render here?
+computation = new Computation
+widgets = new Widgets layout, computation  # ZZZ pass render here?
 
 
 # Export (for Widget sublasses)
