@@ -63,11 +63,14 @@ body {
   cursor: default;
 }
 
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
+table.widget {
+  margin-bottom: 20px;
+}
+table.widget, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
 }
 th, td {
-    padding: 5px;
-    text-align: left;
+  padding: 5px;
+  text-align: left;
 }

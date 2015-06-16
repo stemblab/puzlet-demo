@@ -1,112 +1,51 @@
-$blab.newSlider = (id) ->
-  widgets = $blab.widgets
-  
-  console.log "NEW SLIDER - COUNT", $blab.widgetCount
-  idSpecified = id
-  unless idSpecified
-    id = $blab.widgetCount
-    $blab.widgetCount++
-  
-  unless widgets[id]
-    
-    code = """
-    $blab.slider
-      id: "#{id}"
-      min: 0
-      max: 10
-      step: 0.1
-      init: 5
-      prompt: "Set value:"
-      text: (v) -> v
-    """
-    
-    console.log "CODE", code
-    #$coffee.evaluate(code)
-    #$blab.resources.find("widgets.coffee").containers.fileNodes[0].setCode(code)
-    #$blab.resources.find("widgets.coffee").containers.setEditorContent code
-    #console.log "resource", 
-    
-    #console.log "widgets.coffee", resource
-    
-    if idSpecified
-      resource = $blab.resources.find("widgets.coffee")
-      resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
-      console.log "*** compile widgets.coffee"
-      setTimeout (-> resource.compile()), 500
-    else
-      makeSlider = ->
-        $blab.slider
-          id: "#{id}"
-          min: 0
-          max: 10
-          step: 0.1
-          init: 5
-          prompt: "Set value:"
-          text: (v) -> v
-        
-      setTimeout(makeSlider, 700)
-    
-  widgets[id]?.getVal() ? 5
-  
+Widget = $blab.Widget
 
-$blab.slider = (spec) ->
-#  console.log "slider", $blab.widgets[spec.id]
+class Slider extends Widget
   
-  new $blab.Slider spec
-
-class $blab.Slider
+  @handle: "slider"
+  
+  @initVal: 5
+  
+  @spec: (id) -> """
+    id: "#{id}"
+    min: 0, max: 10, step: 0.1, init: #{Slider.initVal}
+    prompt: "Set value:"
+    text: (v) -> v
+  """
+  
+  @layoutPreamble:
+    "slider = (spec) -> new $blab.Widgets.Slider(spec)"
+    
+  @computePreamble:
+    "slider = (id) -> $blab.Widgets.Slider.make(id)"
+  
+  @make: (id) ->
+    widget = Widget.makeWidget(Slider, id)
+    widget?.getVal() ? Slider.initVal
   
   constructor: (@spec) ->
     
-    {@container, @prompt, @id, @init, @min, @max, @step, @text} = @spec
-#    {@id, @init, @min, @max, @step, @val} = @spec
+    {@id, @min, @max, @step, @init, @prompt, @text} = @spec
     
     @sliderContainer = $("#"+@id)
     if @sliderContainer.length
-      #console.log "CONTAINER", @container, @container.slider()
       @sliderContainer.slider?("destroy")
       @outer = @sliderContainer.parent()
-      #console.log "OUTER", @outer
       @outer?.remove()
     
     @outer = $ "<div>", class: "slider-container"
     @sliderPrompt = $ "<div>", class: "slider-prompt"
     @sliderPrompt.append @prompt
-    @outer.append @sliderPrompt  #@prompt+" "
+    @outer.append @sliderPrompt
     @sliderContainer = $ "<div>", class: "mvc-slider", id: @id
     @outer.append @sliderContainer
     @textDiv = $ "<div>", class: "slider-text"
     @outer.append(" ").append @textDiv
     
-    $($blab.widgetContainer).append @outer
-#    $(@container).append @outer
-    
-    #console.log "outer", $(@id.parent())
-    
-    #@container.append """
-    #<div id="slider-container">
-    ##{@prompt}
-    #<div class="mvc-slider" id="@id"></div>
-    #<div class="slider-text" id="freq-slider-text"></div>
-    #"""
-    # = $ "<div>", class: "slider-container"
-
-    #<div id="slider-container">
-    #Frequency:
-    #<div class="mvc-slider" id="freq-slider"></div>
-    #<div class="slider-text" id="freq-slider-text"></div>
-    #</div>
-    
-    $blab.widgets[@id] = this
-    
-    #@container = $ @containerId
-
-    #@slider?.destroy()
-    #@container.empty()
+    @register @outer  # Superclass method
     
     @slider = @sliderContainer.slider
       #orientation: "vertical"
-      #id: @id
       range: "min"
       min: @min
       max: @max
@@ -114,25 +53,18 @@ class $blab.Slider
       value: @init
       slide: (e, ui) =>
         @setVal(ui.value)
-        $blab.compileWidget()
+        @compute()  # Superclass method
       change: (e, ui) =>  # Unused because responds to slide method
-    
-    #@setVal @init
-    #console.log "VAL", @value
     
   initialize: -> @setVal @init
     
   setVal: (v) ->
     @textDiv.html @text(v)
-    #@val v
     @value = v
-    return unless $blab.widgets
-    #$blab.compileWidget()
-#    widget = $blab.widgets[@id]
-#    widget.val = v
-#    $blab.compileWidget(widget)  # ZZZ reinstate after second compile
   
   getVal: -> @value
-    
-  # API
-  set: (v) -> @sliderContainer.slider("value", v)
+  
+
+$blab.Widgets.Slider = Slider
+
+  

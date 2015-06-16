@@ -1,109 +1,144 @@
-$blab.widgets = widgets = {}
-
-$blab.registered ?= false
-
-$blab.widgetCount = 0
-
-layout = {}
-$blab.layout = (l) ->
-  layout = l
+class Widgets
   
-$blab.widgetContainer = "#row1 .left"
-$blab.pos = (p) => $blab.widgetContainer = p
-
-$blab.text = (t) ->
-  $($blab.widgetContainer).append(t)
+  @filename: "widgets.coffee"  # should be layout.coffee
   
-doLayout = ->
-  w = $("#widgets")
-  w.empty()
-  for label, row of layout
-    console.log label, row
-    r = $ "<div>", id: label
-    w.append r
-    for col in row
-      c = $ "<div>", class: col
-      r.append c
-    r.append($ "<div>", class: "clear")
+  constructor: (@layout) ->  # ZZZ pass render?
+    
+    @widgets = {}
+    @count = 0
+    
+    $(document).on "preCompileCoffee", (evt, data) =>
+      url = data.resource.url
+      console.log "preCompileCoffee", url 
+      @count = 0
+      return unless url is "widgets.coffee"
+      @layout.render()
+      @layoutPrecode()
+      @widgets = {}
+    
+    $(document).on "compiledCoffeeScript", (evt, data) =>
+      @init() if data.url is "widgets.coffee"
+    
+  init: ->
+    @computePrecode()
+    for key, widget in @widgets #$blab.widgets
+      widget?.initialize()
+    @compute()
+    
+  register: (id, obj, element) ->
+    @layout.append element
+    @widgets[id] = obj
+    
+  add: (Widget, id) ->
+    
+    idSpecified = id
+    unless idSpecified
+      id = @count
+      @count++
+  
+    name = Widget.handle
+    spec = Widget.spec(id)
+    s = spec.split("\n").join("\n  ")
+    code = "#{name}\n  #{s}"
+  
+    make = ->
+      new Widget eval(CoffeeScript.compile(spec, bare: true))
+  
+    unless @widgets[id]
+      if idSpecified
+        resource = $blab.resources.find("widgets.coffee")
+        resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
+        setTimeout (-> resource.compile()), 500
+      else
+        setTimeout(make, 700)
+      
+    @widgets[id]
+    
+  compute: ->
+    # ZZZ TEMP - wired to foo.coffee
+    resource = $blab.resources.find("foo.coffee")
+    resource?.compile()
+  
+  layoutPrecode: ->
+    
+    precompile = {}
+    precompile["widgets.coffee"] =
+      preamble:  """
+      #{Layout.shortcuts}
+      #{$blab.Widgets.Slider.layoutPreamble}
+      #{$blab.Widgets.Table.layoutPreamble}
+      
+      """
+      postamble: ""
+      
+    $blab.precompile(precompile)
+    
+  computePrecode: ->
+    
+    precompile = {}
+  
+    precompile["foo.coffee"] =
+      preamble: """
+      #{$blab.Widgets.Slider.computePreamble}
+      #{$blab.Widgets.Table.computePreamble}
+      
+      """
+      
+      postamble: ""
+    
+    $blab.precompile(precompile)
 
-$(document).on "preCompileCoffee", (evt, data) ->
-  console.log "preCompileCoffee", data.resource.url 
-  $blab.widgetCount = 0
-  if data.resource.url is "widgets.coffee"
+
+class Widget
+  
+  @makeWidget: (C, id) -> theWidgets.add(C, id)
+    
+  register: (element) ->
+    theWidgets.register @id, this, element
+    
+  compute: ->
+    theWidgets.compute()  # for foo.coffee
+
+
+class Layout
+  
+  @shortcuts: """
+    layout = (spec) -> $blab.layout.set(spec)
+    pos = (spec) -> $blab.layout.pos(spec)
+    text = (spec) -> $blab.layout.text(spec)
+  """
+  
+  constructor: ->
+    @layout = {}
+    @currentContainer = "#row1 .left"
+  
+  set: (@layout) ->
+  
+  pos: (@currentContainer) ->
+    
+  render: ->
     w = $("#widgets")
     w.empty()
-    doLayout()
-    
-    #r = $ "<div>", id: "row1"
-    #w.append r
-    #r.append($ "<div>", class: "left").append($ "<div>", class: "right")
-    $blab.widgets = widgets = {}
-
-$(document).on "compiledCoffeeScript", (evt, data) ->
-  #console.log "+++Compiled", data
-  $blab.initWidgets() if data.url is "widgets.coffee"
-
-$blab.initWidgets = ->
-  # Ignore this code - it will be replaced
+    for label, row of @layout
+      r = $ "<div>", id: label
+      w.append r
+      for col in row
+        c = $ "<div>", class: col
+        r.append c
+      r.append($ "<div>", class: "clear")
+        
+  append: (element) -> $(@currentContainer).append element
   
-  console.log "LAYOUT", layout
-  #doLayout()
-  
-  $blab.widgets['y0'] = $("#y0") # ZZZ temp
-  $blab.widgetPrecode()
-  for key, widget in $blab.widgets
-    widget?.initialize() unless key is 'y0'
-    #$blab.widgets['z-slider']?.initialize()
-  
-  $blab.compileWidget()
+  text: (t) -> @append t
 
 
-$blab.widgetPrecode = ->
-  
-  #return if $blab.registered
-  
-  precompile = {}
-  
-  precompile["foo.coffee"] =
-    preamble: "slider = (id) -> $blab.newSlider(id)\ntable = (id, v...) -> $blab.newTable(id, v)\n"
-#    preamble: "slider = (id) -> $blab.newSlider(id)\ntable = (id, v) ->\n  $('#'+id).text(v)\n  null\n"
-    postamble: ""
-  
-  $blab.precompile(precompile)
-  
-  $blab.registered = true
-  
-#$blab.widgetPrecode()
+layout = new Layout
+theWidgets = new Widgets layout  # ZZZ pass render here?
 
-$blab.compileWidget = (widget) ->
-  
-  #console.log "**** compile widget"
-  
-  # TEMP
-  resource = $blab.resources.find("foo.coffee")
-  resource?.compile()
-  return
-  
-  for file in widget.files
-    resource = $blab.resources.find(file)
-    #console.log "------------- compileWidget", file, resource
-    resource?.compile()
-  #$.event.trigger("preCompileCoffee", {resource: $blab.resources.find("widgets.coffee")})  # ZZZ hack
 
-#---------------------------------------  
-# ZZZ to delete/move
-$blab.OLD_registerWidgets = ->
+# Export (for Widget sublasses)
+$blab.Widget = Widget
+
+$blab.Widgets = {}  # Subclasses of Widget - ZZZ different name?
   
-  return if $blab.registered
-  
-  precompile = {}
-  
-  for key, widget of $blab.widgets
-    for file in widget.files
-      p = precompile[file] ?= {preamble: "", postamble: ""}
-      p.preamble += "#{widget.symbol} = $blab.widgets['#{key}'].val\n" if widget.type is "source"
-      p.postamble += "\n$('##{key}').text(#{widget.symbol})" if widget.type is "sink"  # ZZZ Need to generalize
-      
-  $blab.precompile(precompile)
-  
-  $blab.registered = true
+$blab.layout = layout
