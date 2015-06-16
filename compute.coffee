@@ -1,18 +1,10 @@
-a = [1, 2, 3]
+t = linspace(-1, 1, 200)
 
-b = a + pi
-
-t = 0.1 * linspace(-pi, pi, 200)
-
-#f = 5
 f = slider "freq-slider"
 s = slider "noise-var"
-p = slider()
-q = slider "and-another"
+q = slider "another"
 y = sin(2*pi*f*t) + s*rand([t.length])
 
 table "my-table", t[0..3], y[0..3]
 
-#table "y0", y[0]
-
-plot t, y
+plot "sinusoid", t, y

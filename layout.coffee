@@ -9,4 +9,4 @@ layout
   
 pos "#row1 .left"
 
-text "Add any text in widgets.coffee."
+text "<p>Add any text in layout.coffee.</p>"

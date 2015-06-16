@@ -6,7 +6,8 @@ class Widgets
   
   @Registry: {}
   
-  @register: (Widget) -> @Registry[Widget.name] = Widget
+  @register: (WidgetSet) ->
+    @Registry[Widget.name] = Widget for Widget in WidgetSet
     
   @widgets: {}
   @count: 0
