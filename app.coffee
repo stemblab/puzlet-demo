@@ -1,126 +1,122 @@
 class Widgets
+
+  @filename: "widgets.coffee"  # should be layout.coffee
   
-  filename: "widgets.coffee"  # should be layout.coffee
+  @Registry: {}
   
-  constructor: (@layout, @computation) ->  # ZZZ pass render?
+  @register: (Widget) -> @Registry[Widget.name] = Widget
     
-    @widgets = {}
-    @count = 0
+  @widgets: {}
+  @count: 0
+  
+  @initialize: ->
+    
+    @Layout = Layout
     
     $(document).on "preCompileCoffee", (evt, data) =>
       url = data.resource.url
       console.log "preCompileCoffee", url 
       @count = 0  # ZZZ Bug?  only for foo.coffee or widgets.coffee
       return unless url is @filename
-      @layout.render()
+      @Layout.render()
       @precode()
       @widgets = {}
     
     $(document).on "compiledCoffeeScript", (evt, data) =>
-      return unless data.url is @filename
+      return unless data.url is Widgets.filename
       widget?.initialize?() for key, widget in @widgets
-      @computation.init()
+      Computation.init()
+  
+  @append: (id, widget, element) ->
+    @widgets[id] = widget
+    @Layout.append element
     
-  register: (id, obj, element) ->
-    @widgets[id] = obj
-    @layout.append element
-    
-  fetch: (Widget, id) ->
+  @fetch: (W, id) ->
     idSpecified = id?
     unless idSpecified
       id = @count
       @count++
-    if @widgets[id]
-      @widgets[id]
+    widget = @widgets[id]
+    if widget
+      widget
     else
       # Create new widget
-      if idSpecified then @createFromId(Widget, id) else @createFromCounter(Widget, id)
+      if idSpecified then @createFromId(W, id) else @createFromCounter(W, id)
       null  # Widget must set default val
     
-  createFromId: (Widget, id) ->
-    resource = $blab.resources.find(@filename)
-    name = Widget.handle
-    spec = Widget.spec(id)
+  @createFromId: (W, id) ->
+    resource = $blab.resources.find(Widgets.filename)
+    name = W.handle
+    spec = W.initSpec(id)
     s = spec.split("\n").join("\n  ")
     code = "#{name}\n  #{s}"
     resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
     setTimeout (-> resource.compile()), 500
     
-  createFromCounter: (Widget, id) ->
-    spec = Widget.spec(id)
-    make = -> new Widget eval(CoffeeScript.compile(spec, bare: true))
+  @createFromCounter: (W, id) ->
+    spec = W.initSpec(id)
+    make = -> new W eval(CoffeeScript.compile(spec, bare: true))
     setTimeout(make, 700)
     
-  compute: -> @computation.compute()
+  @compute: -> Computation.compute()
   
-  precode: ->
+  @precode: ->
+    
+    preamble = Layout.shortcuts + "\n"
+    preamble += W.layoutPreamble+"\n" for n, W of @Registry
+    
     precompile = {}
     precompile[@filename] =
-      preamble:  """
-      #{Layout.shortcuts}
-      #{$blab.Widgets.Slider.layoutPreamble}
-      #{$blab.Widgets.Table.layoutPreamble}
-      
-      """
+      preamble: preamble
       postamble: ""
+    
     $blab.precompile(precompile)
-
-
-class Widget
-  
-  @fetch: (C, id) -> widgets.fetch(C, id)
-    
-  register: (element) -> widgets.register @id, this, element
-    
-  compute: -> widgets.compute()
 
 
 class Computation
   
-  constructor: ->
-    
-  init: ->
+  @filename: "foo.coffee"  # ZZZ TEMP - wired to foo.coffee
+  
+  @init: ->
     @precode()
     @compute()
     
-  compute: ->
-    # ZZZ TEMP - wired to foo.coffee
-    resource = $blab.resources.find("foo.coffee")
+  @compute: ->
+    resource = $blab.resources.find(@filename)
     resource?.compile()
     
-  precode: ->
+  @precode: ->
+    
+    preamble = ""
+    preamble += W.computePreamble+"\n" for n, W of Widgets.Registry
+    
     precompile = {}
-    precompile["foo.coffee"] =
-      preamble: """
-      #{$blab.Widgets.Slider.computePreamble}
-      #{$blab.Widgets.Table.computePreamble}
-      
-      """
-      
+    precompile[@filename] =
+      preamble: preamble
       postamble: ""
+    
     $blab.precompile(precompile)
 
 
 class Layout
   
   @shortcuts: """
-    layout = (spec) -> $blab.layout.set(spec)
-    pos = (spec) -> $blab.layout.pos(spec)
-    text = (spec) -> $blab.layout.text(spec)
+    layout = (spec) -> $blab.Widgets.Layout.set(spec)
+    pos = (spec) -> $blab.Widgets.Layout.pos(spec)
+    text = (spec) -> $blab.Widgets.Layout.text(spec)
   """
   
-  constructor: ->
-    @layout = {}
-    @currentContainer = "#row1 .left"
+  @spec: {}
+  @currentContainer: null
   
-  set: (@layout) ->
+  @set: (@spec) ->
   
-  pos: (@currentContainer) ->
+  @pos: (@currentContainer) ->
     
-  render: ->
+  @render: ->
     w = $("#widgets")
     w.empty()
-    for label, row of @layout
+    for label, row of @spec
       r = $ "<div>", id: label
       w.append r
       for col in row
@@ -128,19 +124,13 @@ class Layout
         r.append c
       r.append($ "<div>", class: "clear")
         
-  append: (element) -> $(@currentContainer).append element
+  @append: (element) -> $(@currentContainer).append element
   
-  text: (t) -> @append t
+  @text: (t) -> @append t
 
 
-layout = new Layout
-computation = new Computation
-widgets = new Widgets layout, computation  # ZZZ pass render here?
+Widgets.initialize()
 
+# Export
+$blab.Widgets = Widgets 
 
-# Export (for Widget sublasses)
-$blab.Widget = Widget
-
-$blab.Widgets = {}  # Subclasses of Widget - ZZZ different name?
-  
-$blab.layout = layout

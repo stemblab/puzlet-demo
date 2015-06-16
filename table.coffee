@@ -1,22 +1,23 @@
-Widget = $blab.Widget
+Widgets = $blab.Widgets
 
-class Table extends Widget
+class Table
   
   @handle: "table"
+  @api: "$blab.Widgets.Registry.Table"
   
-  @spec: (id) -> """
+  @initSpec: (id) -> """
     id: "#{id}"
     headings: ["Column 1", "Column 2"]
   """
   
   @layoutPreamble:
-    "table = (spec) -> new $blab.Widgets.Table(spec)"
-    
+    "#{@handle} = (spec) -> new #{@api}(spec)"
+  
   @computePreamble:
-    "table = (id, v...) -> $blab.Widgets.Table.compute(id, v)"
+    "#{@handle} = (id, v...) -> #{@api}.compute(id, v)"
   
   @compute: (id, v) ->
-    Widget.fetch(Table, id)?.setVal(v)
+    Widgets.fetch(Table, id)?.setVal(v)
   
   constructor: (@spec) ->
     
@@ -26,7 +27,7 @@ class Table extends Widget
     @table.remove() if @table.length
     @table = $ "<table>", id: @id, class: "widget"
     
-    @register @table
+    Widgets.append @id, this, @table
     
   initialize: -> #@setVal @init
     
@@ -46,4 +47,4 @@ class Table extends Widget
     @value = v
 
 
-$blab.Widgets.Table = Table
+Widgets.register Table

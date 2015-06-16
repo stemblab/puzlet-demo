@@ -1,26 +1,28 @@
-Widget = $blab.Widget
+Widgets = $blab.Widgets
 
-class Slider extends Widget
+class Slider
   
   @handle: "slider"
+  @api: "$blab.Widgets.Registry.Slider"
   
   @initVal: 5
   
-  @spec: (id) -> """
+  @initSpec: (id) -> """
     id: "#{id}"
     min: 0, max: 10, step: 0.1, init: #{Slider.initVal}
     prompt: "Set value:"
     text: (v) -> v
   """
   
+  # ZZZ can be determined in Widgets?
   @layoutPreamble:
-    "slider = (spec) -> new $blab.Widgets.Slider(spec)"
+    "#{@handle} = (spec) -> new #{@api}(spec)"
     
   @computePreamble:
-    "slider = (id) -> $blab.Widgets.Slider.compute(id)"
+    "#{@handle} = (id) -> #{@api}.compute(id)"
   
   @compute: (id) ->
-    Widget.fetch(Slider, id)?.getVal() ? Slider.initVal
+    Widgets.fetch(Slider, id)?.getVal() ? Slider.initVal
   
   constructor: (@spec) ->
     
@@ -41,7 +43,7 @@ class Slider extends Widget
     @textDiv = $ "<div>", class: "slider-text"
     @outer.append(" ").append @textDiv
     
-    @register @outer  # Superclass method
+    Widgets.append @id, this, @outer  # not now: Superclass method
     
     @slider = @sliderContainer.slider
       #orientation: "vertical"
@@ -52,7 +54,7 @@ class Slider extends Widget
       value: @init
       slide: (e, ui) =>
         @setVal(ui.value)
-        @compute()  # Superclass method
+        Widgets.compute()  # Superclass method
       change: (e, ui) =>  # Unused because responds to slide method
     
   initialize: -> @setVal @init
@@ -64,4 +66,4 @@ class Slider extends Widget
   getVal: -> @value
   
 
-$blab.Widgets.Slider = Slider
+Widgets.register Slider
