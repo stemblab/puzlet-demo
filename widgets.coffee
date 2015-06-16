@@ -163,5 +163,6 @@ class Plot
     y = v[1]
     $.plot @plot, [numeric.transpose([x, y])], params
 
+
 Widgets.register [Slider, Table, Plot]
 

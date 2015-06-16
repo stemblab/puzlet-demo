@@ -1,14 +1,14 @@
 #!vanilla
 
 class Widgets
-
+  
   @filename: "layout.coffee"  # should be layout.coffee
   
   @Registry: {}
   
   @register: (WidgetSet) ->
     @Registry[Widget.name] = Widget for Widget in WidgetSet
-    
+  
   @widgets: {}
   @count: 0
   
@@ -26,10 +26,10 @@ class Widgets
       @widgets = {}
     
     $(document).on "compiledCoffeeScript", (evt, data) =>
-      return unless data.url is Widgets.filename
+      return unless data.url is @filename
       widget?.initialize?() for key, widget in @widgets
       Computation.init()
-  
+      
   @append: (id, widget, element) ->
     @widgets[id] = widget
     @Layout.append element
@@ -46,18 +46,29 @@ class Widgets
     null  # Widget must set default val
     
   @createFromId: (Widget, id) ->
-    resource = $blab.resources.find(Widgets.filename)
+    resource = $blab.resources.find(@filename)
     name = Widget.handle
     spec = Widget.initSpec(id)
     s = spec.split("\n").join("\n  ")
     code = "#{name}\n  #{s}"
     resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
-    setTimeout (-> resource.compile()), 500
-    
+    @queueCompile resource
+    #console.log "******* SET WIDGET COMPILE"
+    #if @tCompile
+    #  clearTimeout(@tCompile)
+    #  @tCompile = null
+    #@tCompile = setTimeout (-> resource.compile()), 500
+  
   @createFromCounter: (Widget, id) ->
     spec = Widget.initSpec(id)
     make = -> new Widget eval(CoffeeScript.compile(spec, bare: true))
     setTimeout(make, 700)
+  
+  @queueCompile: (resource) ->
+    if @tCompile
+      clearTimeout(@tCompile)
+      @tCompile = null
+    @tCompile = setTimeout (-> resource.compile()), 500
     
   @compute: -> Computation.compute()
   
@@ -72,6 +83,7 @@ class Widgets
       postamble: ""
     
     $blab.precompile(precompile)
+    
 
 
 class Computation
