@@ -7,8 +7,9 @@ resources
     "/puzlet/ace/ace.js"
     "/puzlet/puzlet/js/render.js"
     "/spacemath/mars-distance/code-widget.coffee"
-    "app.coffee"
-    "widgets.coffee"
+    "/puzlet/widgets/app.coffee"
+    "/puzlet/widgets/widgets.coffee"
+    "/puzlet/widgets/style.css"
     "layout.coffee"
   ]
 
