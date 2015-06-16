@@ -1,3 +1,5 @@
+#!vanilla
+
 class Widgets
 
   @filename: "layout.coffee"  # should be layout.coffee
@@ -31,31 +33,29 @@ class Widgets
     @widgets[id] = widget
     @Layout.append element
     
-  @fetch: (W, id) ->
+  @fetch: (Widget, id) ->
     idSpecified = id?
     unless idSpecified
       id = @count
       @count++
-    widget = @widgets[id]
-    if widget
-      widget
-    else
-      # Create new widget
-      if idSpecified then @createFromId(W, id) else @createFromCounter(W, id)
-      null  # Widget must set default val
+    w = @widgets[id]
+    return w if w
+    # Create new widget
+    if idSpecified then @createFromId(Widget, id) else @createFromCounter(Widget, id)
+    null  # Widget must set default val
     
-  @createFromId: (W, id) ->
+  @createFromId: (Widget, id) ->
     resource = $blab.resources.find(Widgets.filename)
-    name = W.handle
-    spec = W.initSpec(id)
+    name = Widget.handle
+    spec = Widget.initSpec(id)
     s = spec.split("\n").join("\n  ")
     code = "#{name}\n  #{s}"
     resource.containers.fileNodes[0].editor.set(resource.content + "\n\n" + code)
     setTimeout (-> resource.compile()), 500
     
-  @createFromCounter: (W, id) ->
-    spec = W.initSpec(id)
-    make = -> new W eval(CoffeeScript.compile(spec, bare: true))
+  @createFromCounter: (Widget, id) ->
+    spec = Widget.initSpec(id)
+    make = -> new Widget eval(CoffeeScript.compile(spec, bare: true))
     setTimeout(make, 700)
     
   @compute: -> Computation.compute()
@@ -63,7 +63,7 @@ class Widgets
   @precode: ->
     
     preamble = Layout.shortcuts + "\n"
-    preamble += W.layoutPreamble+"\n" for n, W of @Registry
+    preamble += Widget.layoutPreamble+"\n" for n, Widget of @Registry
     
     precompile = {}
     precompile[@filename] =
@@ -88,7 +88,7 @@ class Computation
   @precode: ->
     
     preamble = ""
-    preamble += W.computePreamble+"\n" for n, W of Widgets.Registry
+    preamble += Widget.computePreamble+"\n" for WidgetName, Widget of Widgets.Registry
     
     precompile = {}
     precompile[@filename] =
@@ -114,11 +114,11 @@ class Layout
   @pos: (@currentContainer) ->
     
   @render: ->
-    w = $("#widgets")
-    w.empty()
+    widgets = $("#widgets")
+    widgets.empty()
     for label, row of @spec
       r = $ "<div>", id: label
-      w.append r
+      widgets.append r
       for col in row
         c = $ "<div>", class: col
         r.append c

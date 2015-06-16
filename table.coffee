@@ -1,3 +1,5 @@
+#!vanilla
+
 Widgets = $blab.Widgets
 
 class Table
