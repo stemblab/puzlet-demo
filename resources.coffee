@@ -10,7 +10,7 @@ resources
     "app.coffee"
     "slider.coffee"
     "table.coffee"
-    "widgets.coffee"
+    "layout.coffee"
   ]
 
 # UI-related options:

@@ -1,4 +1,4 @@
-# widgets.coffee
+# layout.coffee
 # Puzlet automatically generates code here.
 
 layout

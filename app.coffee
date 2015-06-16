@@ -1,6 +1,6 @@
 class Widgets
 
-  @filename: "widgets.coffee"  # should be layout.coffee
+  @filename: "layout.coffee"  # should be layout.coffee
   
   @Registry: {}
   
@@ -75,7 +75,7 @@ class Widgets
 
 class Computation
   
-  @filename: "foo.coffee"  # ZZZ TEMP - wired to foo.coffee
+  @filename: "compute.coffee"
   
   @init: ->
     @precode()
