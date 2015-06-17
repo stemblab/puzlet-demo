@@ -31,3 +31,8 @@ body {
   clear:both;
 }
 
+.code-heading {
+  cursor: pointer;
+  color: blue;
+} 
+
