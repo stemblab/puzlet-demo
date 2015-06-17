@@ -11,6 +11,7 @@ resources
     "/puzlet/widgets/widgets.coffee"
     "/puzlet/widgets/style.css"
     "layout.coffee"
+#    "temp.css"
   ]
 
 # UI-related options:
