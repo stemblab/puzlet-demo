@@ -36,3 +36,10 @@ body {
   color: blue;
 } 
 
+/*
+#table-orbit-phobos td:nth-child(2),
+th:nth-child(2){
+  color: red;
+  font-style: italic;
+}
+*/
