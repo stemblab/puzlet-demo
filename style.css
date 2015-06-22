@@ -34,7 +34,23 @@ body {
 .code-heading {
   cursor: pointer;
   color: blue;
-} 
+}
+
+#layout-code-section {
+	position: fixed;
+	bottom: 10px;
+	left: 0px;
+	width: 100%;
+	/*background: green;*/
+	z-index: 10;
+}
+
+div[data-file="layout.coffee"] {
+	border: 3px solid #aaf;
+	width: 900px;
+	margin: 0 auto;
+	max-height: 250px;
+}
 
 /*
 #table-orbit-phobos td:nth-child(2),
