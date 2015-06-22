@@ -5,6 +5,15 @@
 		<title>Puzlet demo</title>
     <!--link rel='icon' href='//puzlet.org/puzlet/images/favicon.ico'/-->
 		<link rel='stylesheet' href='style.css?v=4'>
+    
+    <style>
+    #predefined-code-heading {
+      font-size: 10pt;
+      color: #aaa;
+      cursor: pointer;
+    }
+    </style>
+    
 	</head>
 	
   <body>
@@ -18,18 +27,32 @@
     
     <div class="clear"></div>
     
-    <p class='code-heading' id="computation-code-heading">Computation code</p>
+    <div id="computation-code-wrapper">
+      <p class='code-heading' id="computation-code-heading">Computation code</p>
     
-    <div id="computation-code-section">
-      <div class="left">
-        <div data-file="compute.coffee"></div>
-        <br>
-        <div data-file="predefine.coffee"></div>
+      <div id="computation-code-section">
+        <span id="predefined-code-heading"></span><br>
+        <div class="left">
+          <div class="predefined-code">
+            <div data-file="predefine.coffee"></div>
+            <br>
+          </div>
+        </div>
+        <div class="right">
+          <div class="predefined-code">
+            <div data-eval="predefine.coffee"></div>
+            <br>
+          </div>
+        </div>
+        <div class="clear"></div>
+        <div class="left">
+          <div data-file="compute.coffee"></div>
+        </div>
+        <div class="right">
+          <div data-eval="compute.coffee"></div>
+        </div>
+        <div class="clear"></div>
       </div>
-      <div class="right">
-        <div data-eval="compute.coffee"></div>
-      </div>
-      <div class="clear"></div>
     </div>
     
     <!--p class='code-heading' id="layout-code-heading">Layout code</p-->
