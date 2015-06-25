@@ -23,13 +23,13 @@
     }
     
     div[data-file="layout.coffee"] {
-      border: 3px solid #aaf;
+      /*border: 3px solid #aaf;*/
       width: 880px;
       margin: 0 auto;
       /*max-height: 250px;*/
     }
     
-    .init-layout-editor {
+    .init-editor {
       display: none;
       /*max-height: 100px;*/
     }
@@ -42,7 +42,7 @@
     <div id='container'>
     
       <div id="main-text"></div>
-      <div data-file="text.html"></div>
+      <div data-file="text.html" class="init-editor"></div>
     
       <div id="widgets"></div>
     
@@ -81,7 +81,7 @@
       <!--p class='code-heading' id="layout-code-heading">Layout code</p-->
     
       <div id="layout-code-section">
-        <div data-file="layout.coffee" class="init-layout-editor"></div>
+        <div data-file="layout.coffee" class="init-editor"></div>
         <div class="clear"></div>
       </div>
       
