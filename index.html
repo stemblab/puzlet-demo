@@ -21,6 +21,18 @@
       cursor: pointer;
       margin-right: 5px;
     }
+    
+    div[data-file="layout.coffee"] {
+      border: 3px solid #aaf;
+      width: 880px;
+      margin: 0 auto;
+      /*max-height: 250px;*/
+    }
+    
+    .init-layout-editor {
+      display: none;
+      /*max-height: 100px;*/
+    }
     </style>
     
 	</head>
@@ -69,7 +81,7 @@
       <!--p class='code-heading' id="layout-code-heading">Layout code</p-->
     
       <div id="layout-code-section">
-        <div data-file="layout.coffee"></div>
+        <div data-file="layout.coffee" class="init-layout-editor"></div>
         <div class="clear"></div>
       </div>
       
