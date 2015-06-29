@@ -28,7 +28,8 @@ body {
 }
 
 .clear {
-  clear:both;
+  clear: both;
+  margin-bottom: 5px;
 }
 
 .code-heading {
