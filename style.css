@@ -43,42 +43,49 @@ body {
 
 .box-3-1 {
 	display: inline-block;
+	vertical-align: top; 
   margin-left: 0px;
   width: 307px;
 }
 
 .box-3-2 {
 	display: inline-block;
+	vertical-align: top;
   margin-left: 20px;
   width: 307px;
 }
 
 .box-3-3 {
 	display: inline-block;
+	vertical-align: top; 
   margin-left: 20px;
   width: 306px;
 }
 
 .box-4-1 {
 	display: inline-block;
+	vertical-align: top; 
   margin-left: 0px;
   width: 225px;
 }
 
 .box-4-2 {
 	display: inline-block;
+	vertical-align: top;
   margin-left: 20px;
   width: 225px;
 }
 
 .box-4-3 {
 	display: inline-block;
+	vertical-align: top; 
   margin-left: 20px;
   width: 225px;
 }
 
 .box-4-4 {
 	display: inline-block;
+	vertical-align: top;
   margin-left: 20px;
   width: 225px;
 }
