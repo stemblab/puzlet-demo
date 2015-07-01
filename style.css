@@ -27,6 +27,62 @@ body {
    width: 470px;
 }
 
+.box-1-1 {
+	width: 100%;
+}
+
+.box-2-1 {
+  float: left;
+  width: 470px;	
+}
+
+.box-2-2 {
+  float: right;
+  width: 470px;
+}
+
+.box-3-1 {
+	display: inline-block;
+  margin-left: 0px;
+  width: 307px;
+}
+
+.box-3-2 {
+	display: inline-block;
+  margin-left: 20px;
+  width: 307px;
+}
+
+.box-3-3 {
+	display: inline-block;
+  margin-left: 20px;
+  width: 306px;
+}
+
+.box-4-1 {
+	display: inline-block;
+  margin-left: 0px;
+  width: 225px;
+}
+
+.box-4-2 {
+	display: inline-block;
+  margin-left: 20px;
+  width: 225px;
+}
+
+.box-4-3 {
+	display: inline-block;
+  margin-left: 20px;
+  width: 225px;
+}
+
+.box-4-4 {
+	display: inline-block;
+  margin-left: 20px;
+  width: 225px;
+}
+
 .clear {
   clear: both;
   margin-bottom: 5px;
