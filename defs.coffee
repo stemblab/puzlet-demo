@@ -1,4 +1,4 @@
 defs
-  foo: 30
+  foo: (x) -> x + 1
   bar: 40
   
