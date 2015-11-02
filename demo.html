@@ -14,6 +14,17 @@
   iframe.noborder {
     border: none;
   }
+  .left {
+    float: left;
+    width: 400px;
+  }
+  .right {
+     float: right;
+     width: 550px;
+  }
+  li {
+    margin-bottom: 10px;
+  }
   </style>
 </head>
 <body>
@@ -27,9 +38,19 @@
   
   <iframe width=1070 height=720 src="//blabr.io/?4511714609474df6cfa4&bare=1"></iframe>
   
-  <p>And yet another:</p>
+  <div class="left">
+  <h2>Design a second order PLL loop filter</h2>
+  <ul>
+    <li>Passive, second-order loop filter design for charge-pump PLLs.
+      (See <a href="http://sss-mag.com/pdf/pllfil.pdf" target="_blank">[pdf]</a> for design details.)
+    <li>Sliders control phase-margin and unity-gain bandwidth.
+    <li><a href="//blabr.io?ab9f8c1a13632ffc981e" target="_blank">View source code</a>
+  </ul>
+  </div>
   
-  <iframe class="noborder" width=550 height=500 src="//blabr.io/?ab9f8c1a13632ffc981e&bare=1&pos=2" scrolling="no"></iframe>
+  <div class="right">
+  <iframe class="noborder" width=100% height=500 src="//blabr.io/?ab9f8c1a13632ffc981e&bare=1&pos=2" scrolling="no"></iframe>
+  </div>
   
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     
